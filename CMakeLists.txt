@@ -244,6 +244,13 @@ if (BUILD_FRAMEWORK)
 endif ()
 
 
+if (gaen_MINEXT)
+  set(ZLIB_FOUND TRUE)
+  set(BZIP2_FOUND TRUE)
+  set(PNG_FOUND TRUE)
+  set(HARFBUZZ_FOUND TRUE)
+  set(BROTLIDEC_FOUND TRUE)
+else(gaen_MINEXT)
 # Find dependencies
 if (NOT FT_DISABLE_HARFBUZZ)
   set(HARFBUZZ_MIN_VERSION "2.0.0")
@@ -285,6 +292,7 @@ if (NOT FT_DISABLE_BROTLI)
     find_package(BrotliDec)
   endif ()
 endif ()
+endif(gaen_MINEXT)
 
 # Create the configuration file
 if (UNIX)
@@ -495,6 +503,36 @@ endif ()
 set(PKG_CONFIG_REQUIRED_PRIVATE "")
 set(PKG_CONFIG_LIBS_PRIVATE "")
 
+if(gaen_MINEXT)
+  target_link_libraries(freetype PUBLIC
+    png_static
+    harfbuzz
+    bzip2static
+    brotlidec-static
+    zlibstatic
+    )
+#  target_include_directories(freetype PRIVATE ${ZLIB_INCLUDE_DIRS})
+#  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "zlib")
+#
+#  target_link_libraries(freetype PRIVATE ${BZIP2_LIBRARIES})
+#  target_include_directories(freetype PRIVATE ${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
+#  list(APPEND PKG_CONFIG_LIBS_PRIVATE "-lbz2")
+#
+#  target_link_libraries(freetype PRIVATE ${PNG_LIBRARIES})
+#  #target_compile_definitions(freetype PRIVATE ${PNG_DEFINITIONS})
+#  target_include_directories(freetype PRIVATE ${PNG_INCLUDE_DIRS})
+#  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "libpng")
+#
+#  target_link_libraries(freetype PRIVATE ${HarfBuzz_LIBRARY})
+#  target_include_directories(freetype PRIVATE ${HarfBuzz_INCLUDE_DIRS})
+#
+#  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "harfbuzz >= ${HARFBUZZ_MIN_VERSION}")
+#  target_link_libraries(freetype PRIVATE ${BROTLIDEC_LIBRARIES})
+#
+#  #target_compile_definitions(freetype PRIVATE ${BROTLIDEC_DEFINITIONS})
+#  target_include_directories(freetype PRIVATE ${BROTLIDEC_INCLUDE_DIRS})
+#  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "libbrotlidec")
+else() # gaen_MINEXT
 if (ZLIB_FOUND)
   target_link_libraries(freetype PRIVATE ${ZLIB_LIBRARIES})
   target_include_directories(freetype PRIVATE ${ZLIB_INCLUDE_DIRS})
@@ -522,6 +560,7 @@ if (BROTLIDEC_FOUND)
   target_include_directories(freetype PRIVATE ${BROTLIDEC_INCLUDE_DIRS})
   list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "libbrotlidec")
 endif ()
+endif() # gaen_MINEXT
 
 
 # Installation

@@ -248,7 +248,7 @@ if (gaen_MINEXT)
   set(ZLIB_FOUND TRUE)
   set(BZIP2_FOUND TRUE)
   set(PNG_FOUND TRUE)
-  set(HARFBUZZ_FOUND TRUE)
+  #set(HARFBUZZ_FOUND TRUE)
   set(BROTLIDEC_FOUND TRUE)
 else(gaen_MINEXT)
 # Find dependencies
@@ -506,7 +506,7 @@ set(PKG_CONFIG_LIBS_PRIVATE "")
 if(gaen_MINEXT)
   target_link_libraries(freetype PUBLIC
     png_static
-    harfbuzz
+    #harfbuzz
     bzip2static
     brotlidec-static
     zlibstatic
@@ -644,6 +644,7 @@ if (NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL)
 endif ()
 
 
+if(NOT gaen_MINEXT)
 # Packaging
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The FreeType font rendering library.")
@@ -672,3 +673,4 @@ set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
 set(CPACK_COMPONENT_HEADERS_GROUP "Development")
 
 include(CPack)
+endif() # gaen_MINEXT
